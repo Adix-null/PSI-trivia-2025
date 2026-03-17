@@ -1,0 +1,9 @@
+../frontend/node_modules
+./bin
+./obj
+./.vs
+./tests
+./appsettings.json
+./appsettings.Production.json
+../*.md
+../.git
