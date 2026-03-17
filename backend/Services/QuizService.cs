@@ -1,6 +1,5 @@
 using backend.Data;
 using backend.Models;
-using backend.Extensions;
 using backend.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -151,7 +150,7 @@ public class QuizService
     {
         // Validate quiz before creating
         ValidateQuiz(quiz);
-        
+
         await _db.Quizzes.AddAsync(quiz);
         await _db.SaveChangesAsync();
         return quiz;
@@ -261,9 +260,9 @@ public class QuizService
             .OrderByDescending(q => q.TimesPlayed)
             .Take(limit)
             .Select(q => new ValueTuple<int, string, string, int>(
-                q.ID, 
-                q.Title, 
-                q.Creator!.Username, 
+                q.ID,
+                q.Title,
+                q.Creator!.Username,
                 q.TimesPlayed
             ))
             .ToListAsync();

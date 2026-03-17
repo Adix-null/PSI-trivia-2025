@@ -8,14 +8,14 @@ public class Quiz
 
     public int CreatorID { get; set; }
 
-    [JsonIgnore]
-    public User? Creator { get; set; }
-
     public string Title { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
 
     public int TimesPlayed { get; set; }
+
+    [JsonIgnore]
+    public User? Creator { get; set; }
 
     public List<QuizQuestion> Questions { get; set; } = new();
 

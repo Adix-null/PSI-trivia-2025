@@ -1,6 +1,6 @@
 namespace backend.Models;
 
-public class User : backend.Interfaces.IJwtSubject
+public class User : Interfaces.IJwtSubject
 {
     public int Id { get; set; }
 

@@ -83,17 +83,17 @@ const AppMyQuizzesQuizIdRoute = AppMyQuizzesQuizIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/play': typeof PlayRoute
   '/register': typeof RegisterRoute
   '/game/$code': typeof GameCodeRoute
   '/host/$code': typeof HostCodeRoute
-  '/': typeof AppIndexRoute
   '/my-quizzes/$quizId': typeof AppMyQuizzesQuizIdRoute
   '/profile/$profileId': typeof AppProfileProfileIdRoute
   '/quizes/$quizId': typeof AppQuizesQuizIdRoute
-  '/my-quizzes': typeof AppMyQuizzesIndexRoute
-  '/profile': typeof AppProfileIndexRoute
+  '/my-quizzes/': typeof AppMyQuizzesIndexRoute
+  '/profile/': typeof AppProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -126,17 +126,17 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/play'
     | '/register'
     | '/game/$code'
     | '/host/$code'
-    | '/'
     | '/my-quizzes/$quizId'
     | '/profile/$profileId'
     | '/quizes/$quizId'
-    | '/my-quizzes'
-    | '/profile'
+    | '/my-quizzes/'
+    | '/profile/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -201,7 +201,7 @@ declare module '@tanstack/react-router' {
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -229,14 +229,14 @@ declare module '@tanstack/react-router' {
     '/_app/profile/': {
       id: '/_app/profile/'
       path: '/profile'
-      fullPath: '/profile'
+      fullPath: '/profile/'
       preLoaderRoute: typeof AppProfileIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/my-quizzes/': {
       id: '/_app/my-quizzes/'
       path: '/my-quizzes'
-      fullPath: '/my-quizzes'
+      fullPath: '/my-quizzes/'
       preLoaderRoute: typeof AppMyQuizzesIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }

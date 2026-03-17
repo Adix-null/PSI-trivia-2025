@@ -8,4 +8,10 @@ frontend/dist/
 .env
 .DS_Store
 
+.vs/
+
 backend/appsettings.Development.json
+backend/logs
+backend/appsettings.json
+/backend/appsettings.json
+/backend/appsettings.Production.json
