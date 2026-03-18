@@ -1,9 +1,10 @@
 using backend.Data;
-using backend.Services;
 using backend.Middleware;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,8 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins(
                       "http://localhost:5173",
-                      "https://psi.devskee.com"
+                      "https://psi.devskee.com",
+                      "https://psi-quiz.netlify.app"
                   )
                   .AllowAnyHeader()
                   .AllowAnyMethod()
@@ -74,9 +76,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 return Task.CompletedTask;
             }
         };
-});
+    });
 
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseMiddleware<ExceptionLoggingMiddleware>();
 
