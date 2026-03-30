@@ -106,7 +106,7 @@ function RouteComponent() {
           <CardHeader>
             <CardTitle>Join a Game</CardTitle>
             <CardDescription>
-              Enter the game code to join a trivia quiz
+              Enter the game code to join a quiz match
             </CardDescription>
           </CardHeader>
           <CardContent>
