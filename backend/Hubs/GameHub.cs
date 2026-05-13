@@ -200,7 +200,7 @@ public class GameHub : Hub
         var dto = new QuestionDto(
             Index: game.CurrentQuestionIndex,
             QuestionText: q.QuestionText,
-            Options: q.Options,
+            Options: q.Options.Select(o => new OptionDto(o.Id, o.OptionText)).ToList(),
             EndsAt: game.QuestionEndTime.Value
         );
 

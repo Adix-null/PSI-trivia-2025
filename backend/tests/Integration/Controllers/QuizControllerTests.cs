@@ -142,7 +142,7 @@ public class QuizControllerTests : IClassFixture<CustomWebApplicationFactory>
                 {
                     id = 0,
                     questionText = "Test Question",
-                    options = new[] { "A", "B", "C" },
+                    options = new[] { new { id = 0, optionText = "A" }, new { id = 0, optionText = "B" }, new { id = 0, optionText = "C" } },
                     correctOptionIndex = 0,
                     timeLimit = 15
                 }

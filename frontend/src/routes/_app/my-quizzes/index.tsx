@@ -31,7 +31,8 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  interface Question { id: number; questionText: string; options: string[]; correctOptionIndex: number }
+  interface Option { id: number; optionText: string }
+  interface Question { id: number; questionText: string; options: Option[]; correctOptionIndex: number }
   interface MyQuiz { id: number; title: string; description: string; questions: Question[]; creatorID: number; timesPlayed: number; }
   const [quizToDelete, setQuizToDelete] = useState<MyQuiz | null>(null);
 

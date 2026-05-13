@@ -26,10 +26,15 @@ export const Route = createFileRoute("/_app/my-quizzes/$quizId")({
   component: RouteComponent,
 });
 
+interface Option {
+  id: number;
+  optionText: string;
+}
+
 interface Question {
   id: number;
   questionText: string;
-  options: string[];
+  options: Option[];
   correctOptionIndex: number;
   timeLimit: number;
 }
@@ -87,7 +92,10 @@ function RouteComponent() {
           Questions: questions.map((q) => ({
             Id: q.id,
             QuestionText: q.questionText,
-            Options: q.options,
+            Options: q.options.map((o) => ({
+              Id: o.id,
+              OptionText: o.optionText,
+            })),
             CorrectOptionIndex: q.correctOptionIndex,
             TimeLimit: q.timeLimit,
           })),
@@ -122,7 +130,10 @@ function RouteComponent() {
       id:
         questions.length > 0 ? Math.max(...questions.map((q) => q.id)) + 1 : 1,
       questionText: "",
-      options: ["", ""],
+      options: [
+        { id: 0, optionText: "" },
+        { id: 0, optionText: "" },
+      ],
       correctOptionIndex: 0,
       timeLimit: 30, // default
     };
@@ -148,7 +159,12 @@ function RouteComponent() {
   const addOption = (questionId: number) => {
     setQuestions(
       questions.map((q) =>
-        q.id === questionId ? { ...q, options: [...q.options, ""] } : q
+        q.id === questionId
+          ? {
+            ...q,
+            options: [...q.options, { id: 0, optionText: "" }],
+          }
+          : q
       )
     );
   };
@@ -186,7 +202,7 @@ function RouteComponent() {
           ? {
             ...q,
             options: q.options.map((opt, i) =>
-              i === optionIndex ? value : opt
+              i === optionIndex ? { ...opt, optionText: value } : opt
             ),
           }
           : q
@@ -393,7 +409,7 @@ function RouteComponent() {
                           />
                           <div className="flex items-center gap-2 flex-1">
                             <Input
-                              value={option}
+                              value={option.optionText}
                               onChange={(e) =>
                                 updateOption(
                                   question.id,

@@ -100,12 +100,12 @@ public class QuizService
                 // Check for empty options
                 for (int j = 0; j < question.Options.Count; j++)
                 {
-                    if (string.IsNullOrWhiteSpace(question.Options[j]))
+                    if (string.IsNullOrWhiteSpace(question.Options[j].OptionText))
                     {
                         throw new QuizValidationException(
                             $"Question #{i + 1}: Option #{j + 1} cannot be empty.",
                             $"Questions[{i}].Options[{j}]",
-                            question.Options[j]
+                            question.Options[j].OptionText
                         );
                     }
                 }
@@ -118,6 +118,7 @@ public class QuizService
     {
         return await _db.Quizzes
             .Include(q => q.Questions)
+                .ThenInclude(q => q.Options)
             .AsNoTracking()
             .OrderBy(q => q.ID)
             .ToListAsync();
@@ -132,6 +133,7 @@ public class QuizService
 
         return await _db.Quizzes
             .Include(q => q.Questions)
+                .ThenInclude(q => q.Options)
             .Where(q => q.CreatorID == creatorId)
             .AsNoTracking()
             .OrderBy(q => q.ID)
@@ -142,6 +144,7 @@ public class QuizService
     {
         return await _db.Quizzes
             .Include(q => q.Questions)
+                .ThenInclude(q => q.Options)
             .AsNoTracking()
             .FirstOrDefaultAsync(q => q.ID == quizId);
     }
@@ -173,6 +176,7 @@ public class QuizService
     {
         var quiz = await _db.Quizzes
             .Include(q => q.Questions)
+                .ThenInclude(q => q.Options)
             .FirstOrDefaultAsync(q => q.ID == quizId);
 
         if (quiz == null)
@@ -206,17 +210,48 @@ public class QuizService
 
         foreach (var question in updatedQuiz.Questions)
         {
-            var options = question.Options?.ToList() ?? new List<string>();
-
             if (question.Id > 0)
             {
-                var existing = quiz.Questions.FirstOrDefault(q => q.Id == question.Id);
-                if (existing != null)
+                var existingQuestion = quiz.Questions.FirstOrDefault(q => q.Id == question.Id);
+                if (existingQuestion != null)
                 {
-                    existing.QuestionText = question.QuestionText;
-                    existing.Options = options;
-                    existing.CorrectOptionIndex = question.CorrectOptionIndex;
-                    existing.TimeLimit = question.TimeLimit;
+                    existingQuestion.QuestionText = question.QuestionText;
+                    existingQuestion.CorrectOptionIndex = question.CorrectOptionIndex;
+                    existingQuestion.TimeLimit = question.TimeLimit;
+
+                    // Sync Options
+                    var incomingOptionIds = question.Options
+                        .Where(o => o.Id > 0)
+                        .Select(o => o.Id)
+                        .ToHashSet();
+
+                    var optionsToRemove = existingQuestion.Options
+                        .Where(o => !incomingOptionIds.Contains(o.Id))
+                        .ToList();
+
+                    foreach (var opt in optionsToRemove)
+                    {
+                        existingQuestion.Options.Remove(opt);
+                    }
+
+                    foreach (var option in question.Options)
+                    {
+                        if (option.Id > 0)
+                        {
+                            var existingOption = existingQuestion.Options.FirstOrDefault(o => o.Id == option.Id);
+                            if (existingOption != null)
+                            {
+                                existingOption.OptionText = option.OptionText;
+                            }
+                        }
+                        else
+                        {
+                            existingQuestion.Options.Add(new Option
+                            {
+                                OptionText = option.OptionText
+                            });
+                        }
+                    }
                     continue;
                 }
             }
@@ -224,7 +259,10 @@ public class QuizService
             quiz.Questions.Add(new QuizQuestion
             {
                 QuestionText = question.QuestionText,
-                Options = options,
+                Options = question.Options.Select(o => new Option
+                {
+                    OptionText = o.OptionText
+                }).ToList(),
                 CorrectOptionIndex = question.CorrectOptionIndex,
                 TimeLimit = question.TimeLimit
             });

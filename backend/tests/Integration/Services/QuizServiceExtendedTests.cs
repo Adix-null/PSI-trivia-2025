@@ -370,7 +370,7 @@ public class QuizServiceExtendedTests : IClassFixture<CustomWebApplicationFactor
             questions.Add(new QuizQuestion
             {
                 QuestionText = $"Question {i}",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             });
@@ -419,7 +419,7 @@ public class QuizServiceExtendedTests : IClassFixture<CustomWebApplicationFactor
                 new QuizQuestion
                 {
                     QuestionText = "Bad Question",
-                    Options = new List<string> { "Only One" }, // Too few options
+                    Options = new List<Option> { new Option { OptionText = "Only One" } }, // Too few options
                     CorrectOptionIndex = 0,
                     TimeLimit = 10
                 }
@@ -460,7 +460,7 @@ public class QuizServiceExtendedTests : IClassFixture<CustomWebApplicationFactor
                 new QuizQuestion
                 {
                     QuestionText = "Question",
-                    Options = new List<string> { "A", "B", "C" },
+                    Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" }, new Option { OptionText = "C" } },
                     CorrectOptionIndex = 5, // Out of range
                     TimeLimit = 10
                 }

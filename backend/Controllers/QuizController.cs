@@ -163,7 +163,11 @@ public class QuizController : ControllerBase
             {
                 Id = q.Id,
                 QuestionText = q.QuestionText,
-                Options = q.Options,
+                Options = q.Options.Select(o => new Option
+                {
+                    Id = o.Id,
+                    OptionText = o.OptionText
+                }).ToList(),
                 CorrectOptionIndex = q.CorrectOptionIndex,
                 TimeLimit = q.TimeLimit
             }).ToList()
@@ -192,7 +196,7 @@ public class QuizController : ControllerBase
             Questions = quiz.Questions.Select(q => new QuizQuestionDto(
                 Id: q.Id,
                 QuestionText: q.QuestionText,
-                Options: q.Options,
+                Options: q.Options.Select(o => new OptionDto(o.Id, o.OptionText)).ToList(),
                 CorrectOptionIndex: q.CorrectOptionIndex,
                 TimeLimit: q.TimeLimit
             )).ToList()
@@ -212,7 +216,7 @@ public class QuizController : ControllerBase
             Questions = quiz.Questions.Select(q => new QuizQuestionPublicDto(
                 Id: q.Id,
                 QuestionText: q.QuestionText,
-                Options: q.Options,
+                Options: q.Options.Select(o => new OptionDto(o.Id, o.OptionText)).ToList(),
                 TimeLimit: q.TimeLimit
             )).ToList()
         };
