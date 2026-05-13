@@ -8,10 +8,11 @@ import { WinnersPodium } from "@/components/WinnersPodium";
 
 type LobbyPlayerDto = { username: string; isHost: boolean };
 type LobbyUpdateDto = { code: string; players: LobbyPlayerDto[] };
+type OptionDto = { id: number; optionText: string };
 type QuestionDto = {
   index: number;
   questionText: string;
-  options: string[];
+  options: OptionDto[];
   endsAt: string;
 };
 type LeaderboardEntryDto = { username: string; score: number };
@@ -175,7 +176,7 @@ function HostRoute() {
                       : ""
                   }`}
                 >
-                  {o}
+                  {o.optionText}
                 </li>
               ))}
             </ul>

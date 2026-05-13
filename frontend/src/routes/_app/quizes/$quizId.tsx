@@ -17,10 +17,15 @@ export const Route = createFileRoute("/_app/quizes/$quizId")({
   component: QuizById,
 });
 
+interface Option {
+  id: number;
+  optionText: string;
+}
+
 interface QuizQuestion {
   id: number;
   questionText: string;
-  options: string[];
+  options: Option[];
   timeLimit: number;
 }
 
@@ -177,7 +182,7 @@ function QuizById() {
                       <Badge variant="outline" className="shrink-0">
                         {String.fromCharCode(65 + optionIndex)}
                       </Badge>
-                      <span>{option}</span>
+                      <span>{option.optionText}</span>
                     </div>
                   </div>
                 ))}

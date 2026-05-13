@@ -17,7 +17,7 @@ public class Quiz
     [JsonIgnore]
     public User? Creator { get; set; }
 
-    public List<QuizQuestion> Questions { get; set; } = new();
+    public List<QuizQuestion> Questions { get; set; } = [];
 
 }
 
@@ -27,7 +27,7 @@ public class QuizQuestion
 
     public string QuestionText { get; set; } = string.Empty;
 
-    public List<string> Options { get; set; } = new();
+    public List<Option> Options { get; set; } = [];
 
     public int CorrectOptionIndex { get; set; }
 
@@ -39,3 +39,14 @@ public class QuizQuestion
     [JsonIgnore]
     public Quiz? Quiz { get; set; }
 }
+
+public class Option
+{
+    public int Id { get; set; }
+    public string OptionText { get; set; } = string.Empty;
+    public int QuizQuestionId { get; set; }
+
+    [JsonIgnore]
+    public QuizQuestion? QuizQuestion { get; set; }
+}
+

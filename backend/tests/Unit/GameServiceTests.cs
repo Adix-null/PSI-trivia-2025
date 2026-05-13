@@ -17,7 +17,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -45,7 +45,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B", "C" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" }, new Option { OptionText = "C" } },
                 CorrectOptionIndex = 1,
                 TimeLimit = 15
             }
@@ -72,7 +72,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -99,7 +99,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -140,7 +140,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -165,7 +165,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -200,7 +200,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -236,7 +236,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -276,14 +276,14 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Question 1",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             },
             new QuizQuestion
             {
                 QuestionText = "Question 2",
-                Options = new List<string> { "C", "D", "E" },
+                Options = new List<Option> { new Option { OptionText = "C" }, new Option { OptionText = "D" }, new Option { OptionText = "E" } },
                 CorrectOptionIndex = 1,
                 TimeLimit = 15
             }
@@ -308,7 +308,7 @@ public class GameServiceTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }

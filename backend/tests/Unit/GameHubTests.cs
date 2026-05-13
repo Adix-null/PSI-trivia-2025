@@ -235,7 +235,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test Question",
-                Options = new List<string> { "A", "B", "C" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" }, new Option { OptionText = "C" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -283,7 +283,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -311,7 +311,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test Question",
-                Options = new List<string> { "Correct", "Wrong1", "Wrong2" },
+                Options = new List<Option> { new Option { OptionText = "Correct" }, new Option { OptionText = "Wrong1" }, new Option { OptionText = "Wrong2" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -354,7 +354,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test Question",
-                Options = new List<string> { "Correct", "Wrong1", "Wrong2" },
+                Options = new List<Option> { new Option { OptionText = "Correct" }, new Option { OptionText = "Wrong1" }, new Option { OptionText = "Wrong2" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -397,7 +397,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -463,7 +463,7 @@ public class GameHubTests
                 new backend.Models.QuizQuestion
                 {
                     QuestionText = "Only Question",
-                    Options = new List<string> { "A", "B" },
+                    Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                     CorrectOptionIndex = 0,
                     TimeLimit = 10
                 }
@@ -591,7 +591,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Question to skip",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -624,7 +624,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -669,7 +669,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -737,7 +737,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }
@@ -810,7 +810,7 @@ public class GameHubTests
             new QuizQuestion
             {
                 QuestionText = "Test",
-                Options = new List<string> { "A", "B" },
+                Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                 CorrectOptionIndex = 0,
                 TimeLimit = 10
             }

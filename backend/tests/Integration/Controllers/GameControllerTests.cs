@@ -45,7 +45,7 @@ public class GameControllerTests : IClassFixture<CustomWebApplicationFactory>
                     new QuizQuestion
                     {
                         QuestionText = "Test Question",
-                        Options = new List<string> { "A", "B", "C" },
+                        Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" }, new Option { OptionText = "C" } },
                         CorrectOptionIndex = 0,
                         TimeLimit = 15
                     }
@@ -143,7 +143,7 @@ public class GameControllerTests : IClassFixture<CustomWebApplicationFactory>
                     new QuizQuestion
                     {
                         QuestionText = "Test",
-                        Options = new List<string> { "A", "B" },
+                        Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                         CorrectOptionIndex = 0,
                         TimeLimit = 10
                     }
@@ -249,7 +249,7 @@ public class GameControllerTests : IClassFixture<CustomWebApplicationFactory>
                     new QuizQuestion
                     {
                         QuestionText = "Question",
-                        Options = new List<string> { "A", "B" },
+                        Options = new List<Option> { new Option { OptionText = "A" }, new Option { OptionText = "B" } },
                         CorrectOptionIndex = 0,
                         TimeLimit = 10
                     }

@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Quiz> Quizzes => Set<Quiz>();
     public DbSet<QuizQuestion> QuizQuestions => Set<QuizQuestion>();
+    public DbSet<Option> Options => Set<Option>();
     public DbSet<UserStats> UserStats => Set<UserStats>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,6 +22,7 @@ public class AppDbContext : DbContext
         ConfigureUsers(modelBuilder);
         ConfigureQuizzes(modelBuilder);
         ConfigureQuizQuestions(modelBuilder);
+        ConfigureOptions(modelBuilder);
         ConfigureUserStats(modelBuilder);
     }
 
@@ -68,12 +70,6 @@ public class AppDbContext : DbContext
 
     private static void ConfigureQuizQuestions(ModelBuilder modelBuilder)
     {
-        var comparer = new ValueComparer<List<string>>(
-            (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
-            c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v == null ? 0 : v.GetHashCode())),
-            c => c == null ? new List<string>() : c.ToList()
-        );
-
         modelBuilder.Entity<QuizQuestion>(entity =>
         {
             entity.HasKey(q => q.Id);
@@ -83,11 +79,21 @@ public class AppDbContext : DbContext
                 .IsRequired();
             entity.Property(q => q.TimeLimit)
                 .IsRequired();
-            entity.Property(q => q.Options)
-                .HasConversion(
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>())
-                .Metadata.SetValueComparer(comparer);
+
+            entity.HasMany(q => q.Options)
+                .WithOne(q => q.QuizQuestion)
+                .HasForeignKey(q => q.QuizQuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+    private static void ConfigureOptions(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Option>(entity =>
+        {
+            entity.HasKey(o => o.Id);
+            entity.Property(o => o.OptionText)
+                .IsRequired();
         });
     }
 
