@@ -1,5 +1,3 @@
-backend/bin/
-backend/obj/
 *.user
 
 frontend/node_modules/
@@ -15,3 +13,6 @@ backend/logs
 backend/appsettings.json
 /backend/appsettings.json
 /backend/appsettings.Production.json
+**/obj/
+**/bin/
+TestResults/
