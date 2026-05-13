@@ -1,0 +1,45 @@
+name: Auto merge dev into main
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore backend
+
+      - name: Run tests
+        run: dotnet test backend/tests --no-restore --configuration Release
+
+      - name: Merge dev into main
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin main
+
+          git checkout main
+          git pull origin main
+
+          git merge origin/dev --no-ff --no-edit
+
+          git push origin main
