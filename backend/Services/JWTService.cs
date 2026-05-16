@@ -28,6 +28,7 @@ public class JwtService
             new Claim(ClaimTypes.NameIdentifier, subject.Id.ToString()),
             new Claim(ClaimTypes.Email, subject.Email),
             new Claim(ClaimTypes.Name, subject.Username),
+            new Claim(ClaimTypes.Role, subject.Role),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
