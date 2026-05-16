@@ -1,8 +1,9 @@
 namespace backend.Interfaces;
 
 public interface IJwtSubject
-    {
-        int Id { get; }
-        string Email { get; }
-        string Username { get; }
-    }
+{
+    int Id { get; }
+    string Email { get; }
+    string Username { get; }
+    string Role { get; }
+}

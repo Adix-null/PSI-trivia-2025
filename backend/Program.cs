@@ -46,6 +46,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddSingleton<PasswordService>();
 builder.Services.AddScoped<QuizService>();
+builder.Services.AddScoped<ModerationService>();
 builder.Services.AddSingleton<GameService>();
 builder.Services.AddScoped<UserStatsService>();
 builder.Services.AddSignalR();

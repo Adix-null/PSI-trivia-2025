@@ -54,6 +54,10 @@ public class AuthController : ControllerBase
         }
 
         user.Password = _passwordService.HashPassword(user.Password);
+        user.Role = "User";
+        user.IsBanned = false;
+        user.BanReason = null;
+        user.BannedAt = null;
 
         var newUser = await _userService.AddUserAsync(user);
         
@@ -74,7 +78,10 @@ public class AuthController : ControllerBase
             {
                 id = newUser.Id,
                 username = newUser.Username,
-                email = newUser.Email
+                email = newUser.Email,
+                role = newUser.Role,
+                isBanned = newUser.IsBanned,
+                banReason = newUser.BanReason
             },
             message = "Registration successful"
         });
@@ -113,7 +120,10 @@ public class AuthController : ControllerBase
             {
                 id = user.Id,
                 username = user.Username,
-                email = user.Email
+                email = user.Email,
+                role = user.Role,
+                isBanned = user.IsBanned,
+                banReason = user.BanReason
             },
             message = "Login successful"
         });
@@ -153,9 +163,12 @@ public class AuthController : ControllerBase
             authenticated = true,
             user = new 
             {
-                id = int.Parse(userId),
-                username = username,
-                email = email
+                id = user.Id,
+                username = user.Username,
+                email = user.Email,
+                role = user.Role,
+                isBanned = user.IsBanned,
+                banReason = user.BanReason
             },
             message = "Authorized" 
         });

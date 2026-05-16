@@ -12,11 +12,13 @@ public class GameController : ControllerBase
 {
     private readonly GameService _gameService;
     private readonly QuizService _quizService;
+    private readonly UserService _userService;
 
-    public GameController(GameService gameService, QuizService quizService)
+    public GameController(GameService gameService, QuizService quizService, UserService userService)
     {
         _gameService = gameService;
         _quizService = quizService;
+        _userService = userService;
     }
 
     [Authorize]
@@ -27,6 +29,11 @@ public class GameController : ControllerBase
         if (userId == null)
         {
             return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        if (await _userService.IsUserBannedAsync(int.Parse(userId)))
+        {
+            return StatusCode(403, new { message = "Your account is banned. You cannot host games." });
         }
 
         var quiz = await _quizService.GetQuizByIdAsync(req.QuizId);

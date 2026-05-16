@@ -83,6 +83,18 @@ public class QuizController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteById(int id)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        if (await _userService.IsUserBannedAsync(int.Parse(userId)))
+        {
+            return StatusCode(403, new { message = "Your account is banned." });
+        }
+
         // Decrement user's created quiz count
         var temp = await _quizService.GetQuizByIdAsync(id);
         if (temp != null)
@@ -109,6 +121,11 @@ public class QuizController : ControllerBase
         if (userId == null)
         {
             return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        if (await _userService.IsUserBannedAsync(int.Parse(userId)))
+        {
+            return StatusCode(403, new { message = "Your account is banned." });
         }
 
         var quiz = new Quiz
@@ -139,6 +156,11 @@ public class QuizController : ControllerBase
         if (userId == null)
         {
             return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        if (await _userService.IsUserBannedAsync(int.Parse(userId)))
+        {
+            return StatusCode(403, new { message = "Your account is banned." });
         }
 
         var existingQuiz = await _quizService.GetQuizByIdAsync(id);

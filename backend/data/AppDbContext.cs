@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<QuizQuestion> QuizQuestions => Set<QuizQuestion>();
     public DbSet<Option> Options => Set<Option>();
     public DbSet<UserStats> UserStats => Set<UserStats>();
+    public DbSet<Warning> Warnings => Set<Warning>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,6 +25,7 @@ public class AppDbContext : DbContext
         ConfigureQuizQuestions(modelBuilder);
         ConfigureOptions(modelBuilder);
         ConfigureUserStats(modelBuilder);
+        ConfigureWarnings(modelBuilder);
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
@@ -39,6 +41,14 @@ public class AppDbContext : DbContext
                 .HasMaxLength(200);
             entity.Property(u => u.Password)
                 .IsRequired();
+            entity.Property(u => u.Role)
+                .IsRequired()
+                .HasMaxLength(30)
+                .HasDefaultValue("User");
+            entity.Property(u => u.IsBanned)
+                .HasDefaultValue(false);
+            entity.Property(u => u.BanReason)
+                .HasMaxLength(1000);
             entity.HasIndex(u => u.Email).IsUnique();
             entity.HasIndex(u => u.Username).IsUnique();
         });
@@ -94,6 +104,29 @@ public class AppDbContext : DbContext
             entity.HasKey(o => o.Id);
             entity.Property(o => o.OptionText)
                 .IsRequired();
+        });
+    }
+
+    private static void ConfigureWarnings(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Warning>(entity =>
+        {
+            entity.HasKey(w => w.Id);
+            entity.Property(w => w.Message)
+                .IsRequired()
+                .HasMaxLength(1000);
+            entity.Property(w => w.CreatedAt)
+                .IsRequired();
+
+            entity.HasOne(w => w.User)
+                .WithMany()
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(w => w.Admin)
+                .WithMany()
+                .HasForeignKey(w => w.AdminId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 
