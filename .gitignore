@@ -16,3 +16,4 @@ backend/appsettings.json
 **/obj/
 **/bin/
 TestResults/
+.idea/
