@@ -15,21 +15,43 @@ public class GameHub : Hub
     private readonly IHubContext<GameHub> _hubContext;
 
     private readonly UserStatsService _userStatsService;
+    private readonly UserService _userService;
 
-    public GameHub(GameService gameService, QuizService quizService, IHubContext<GameHub> hubContext, UserStatsService userStatsService)
+    public GameHub(GameService gameService, QuizService quizService, IHubContext<GameHub> hubContext, UserStatsService userStatsService, UserService userService)
     {
         _gameService = gameService;
         _quizService = quizService;
         _hubContext = hubContext;
         _userStatsService = userStatsService;
+        _userService = userService;
     }
 
     private string? GetUserId() => Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     private string? GetUsername() => Context.User?.FindFirst(ClaimTypes.Name)?.Value;
 
+    private async Task EnsureAuthenticatedUserIsNotBannedForHosting()
+    {
+        var userId = GetUserId();
+        if (int.TryParse(userId, out var parsedUserId) && await _userService.IsUserBannedAsync(parsedUserId))
+        {
+            throw new HubException("Your account is banned.");
+        }
+    }
+
+    private async Task EnsureAuthenticatedUserIsNotBannedForPlaying()
+    {
+        var userId = GetUserId();
+        if (int.TryParse(userId, out var parsedUserId) && await _userService.IsUserBannedAsync(parsedUserId))
+        {
+            throw new HubException("Your account is banned. You cannot play games.");
+        }
+    }
+
     [Authorize]
     public async Task JoinAsHost(string code)
     {
+        await EnsureAuthenticatedUserIsNotBannedForHosting();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
         {
             throw new HubException("Game not found");
@@ -48,6 +70,8 @@ public class GameHub : Hub
 
     public async Task JoinAsPlayer(string code, string username)
     {
+        await EnsureAuthenticatedUserIsNotBannedForPlaying();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
         {
             throw new HubException("Game not found");
@@ -72,6 +96,8 @@ public class GameHub : Hub
     [Authorize]
     public async Task StartGame(string code)
     {
+        await EnsureAuthenticatedUserIsNotBannedForHosting();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
             throw new HubException("Game not found");
 
@@ -86,6 +112,8 @@ public class GameHub : Hub
     [Authorize]
     public async Task SkipQuestion(string code)
     {
+        await EnsureAuthenticatedUserIsNotBannedForHosting();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
             throw new HubException("Game not found");
         EnsureHost(game);
@@ -95,6 +123,8 @@ public class GameHub : Hub
     [Authorize]
     public async Task NextQuestion(string code)
     {
+        await EnsureAuthenticatedUserIsNotBannedForHosting();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
             throw new HubException("Game not found");
         EnsureHost(game);
@@ -110,6 +140,8 @@ public class GameHub : Hub
 
     public async Task SubmitAnswer(string code, int optionIndex)
     {
+        await EnsureAuthenticatedUserIsNotBannedForPlaying();
+
         if (!_gameService.TryGetGame(code, out var game) || game == null)
             throw new HubException("Game not found");
         if (game.Phase != GamePhase.Question)

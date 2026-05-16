@@ -54,6 +54,13 @@ public class UserService
         return await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
     }
 
+    public async Task<bool> IsUserBannedAsync(int userId)
+    {
+        return await _db.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Id == userId && u.IsBanned);
+    }
+
     public async Task<bool> DeleteUserAsync(int id)
     {
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -196,11 +203,29 @@ public class UserService
         var stats = await _userStatsService.GetUserStatsAsync(userId)
             ?? await _userStatsService.AddUserStatsAsync(userId);
 
+        var warnings = await _db.Warnings
+            .AsNoTracking()
+            .Include(w => w.Admin)
+            .Where(w => w.UserId == userId)
+            .OrderByDescending(w => w.CreatedAt)
+            .Select(w => new WarningDto
+            {
+                Id = w.Id,
+                Message = w.Message,
+                AdminUsername = w.Admin != null ? w.Admin.Username : string.Empty,
+                CreatedAt = w.CreatedAt
+            })
+            .ToListAsync();
+
         return new UserProfileDto
         {
             UserId = user.Id,
             Username = user.Username,
             Email = user.Email,
+            IsBanned = user.IsBanned,
+            BanReason = user.BanReason,
+            BannedAt = user.BannedAt,
+            Warnings = warnings,
             Stats = new UserStatsDto
             {
                 UserId = stats.UserId,

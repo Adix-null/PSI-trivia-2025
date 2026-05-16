@@ -78,6 +78,9 @@ public class UsersController : ControllerBase
         if (string.IsNullOrEmpty(userIdValue) || !int.TryParse(userIdValue, out var requesterId) || requesterId != id)
         {
             profile.Email = null;
+            profile.BanReason = null;
+            profile.BannedAt = null;
+            profile.Warnings = [];
         }
 
         return Ok(profile);
