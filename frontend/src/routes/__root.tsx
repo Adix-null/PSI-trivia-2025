@@ -6,6 +6,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useAuth } from "@/context/AuthContext";
 import type { QueryClient } from "@tanstack/react-query";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 interface RouterContext {
   queryClient: QueryClient;
@@ -30,6 +31,7 @@ const RootLayout = () => {
     <>
       <Navbar />
       <Outlet />
+      <Footer />
       <TanStackRouterDevtools />
     </>
   );

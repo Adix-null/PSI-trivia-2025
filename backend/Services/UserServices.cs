@@ -236,4 +236,56 @@ public class UserService
             })
             .ToListAsync();
     }
+
+        public async Task<UserDataExportDto?> ExportUserDataAsync(int userId)
+    {
+        var user = await _db.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        var stats = await _userStatsService.GetUserStatsAsync(userId);
+
+        var quizzes = await _db.Quizzes
+            .Include(q => q.Questions)
+                .ThenInclude(q => q.Options)
+            .AsNoTracking()
+            .Where(q => q.CreatorID == userId)
+            .ToListAsync();
+
+        return new UserDataExportDto
+        {
+            ExportedAt = DateTimeOffset.UtcNow,
+            UserId = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            Stats = stats == null ? null : new UserStatsDto
+            {
+                UserId = stats.UserId,
+                GamesPlayed = stats.GamesPlayed,
+                GamesWon = stats.GamesWon,
+                QuizzesCreated = stats.QuizzesCreated,
+                QuizPlays = stats.QuizPlays
+            },
+            Quizzes = quizzes.Select(q => new ExportedQuizDto
+            {
+                ID = q.ID,
+                Title = q.Title,
+                Description = q.Description,
+                TimesPlayed = q.TimesPlayed,
+                Questions = q.Questions.Select(qq => new ExportedQuestionDto
+                {
+                    Id = qq.Id,
+                    QuestionText = qq.QuestionText,
+                    Options = qq.Options.Select(o => o.OptionText).ToList(),
+                    CorrectOptionIndex = qq.CorrectOptionIndex,
+                    TimeLimit = qq.TimeLimit
+                }).ToList()
+            }).ToList()
+        };
+    }
 }

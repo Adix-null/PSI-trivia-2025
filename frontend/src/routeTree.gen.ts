@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
@@ -25,6 +26,11 @@ import { Route as AppMyQuizzesQuizIdRouteImport } from './routes/_app/my-quizzes
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayRoute = PlayRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/play': typeof PlayRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/game/$code': typeof GameCodeRoute
   '/host/$code': typeof HostCodeRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/play': typeof PlayRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/game/$code': typeof GameCodeRoute
   '/host/$code': typeof HostCodeRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/play': typeof PlayRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/game/$code': typeof GameCodeRoute
   '/host/$code': typeof HostCodeRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/play'
+    | '/privacy'
     | '/register'
     | '/game/$code'
     | '/host/$code'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/play'
+    | '/privacy'
     | '/register'
     | '/game/$code'
     | '/host/$code'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/play'
+    | '/privacy'
     | '/register'
     | '/game/$code'
     | '/host/$code'
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   PlayRoute: typeof PlayRoute
+  PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   GameCodeRoute: typeof GameCodeRoute
   HostCodeRoute: typeof HostCodeRoute
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play': {
@@ -290,6 +310,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   PlayRoute: PlayRoute,
+  PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   GameCodeRoute: GameCodeRoute,
   HostCodeRoute: HostCodeRoute,
