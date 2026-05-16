@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { searchProfiles, type UserSearchResult } from "@/lib/profile";
 import { getCreatorBadge, getQuizzerBadge } from "@/lib/badges";
-import { User, LogOut, Home, CircleQuestionMark, Play, Search, Loader2 } from "lucide-react";
+import { User, LogOut, Home, CircleQuestionMark, Play, Search, Loader2, Shield } from "lucide-react";
 
 export function Navbar() {
 	const { isAuthenticated, user, logout } = useAuth();
@@ -70,6 +70,18 @@ export function Navbar() {
 										My Quizzes
 									</Button>
 								</Link>
+								{user?.role === "Admin" && (
+									<Link to="/admin">
+										<Button
+											variant="ghost"
+											size="sm"
+											className="gap-2"
+										>
+											<Shield className="h-4 w-4" />
+											Admin
+										</Button>
+									</Link>
+								)}								
 							</>
 						)}
 					</div>

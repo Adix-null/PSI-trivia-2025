@@ -11,7 +11,7 @@ interface RouterContext {
   queryClient: QueryClient;
   auth: {
     isAuthenticated: boolean;
-    user: { id: number; email: string; username: string } | null;
+    user: { id: number; email: string; username: string; role?: string } | null;
   };
 }
 

@@ -18,6 +18,7 @@ import { Route as HostCodeRouteImport } from './routes/host/$code'
 import { Route as GameCodeRouteImport } from './routes/game/$code'
 import { Route as AppProfileIndexRouteImport } from './routes/_app/profile/index'
 import { Route as AppMyQuizzesIndexRouteImport } from './routes/_app/my-quizzes/index'
+import { Route as AppAdminIndexRouteImport } from './routes/_app/admin/index'
 import { Route as AppQuizesQuizIdRouteImport } from './routes/_app/quizes/$quizId'
 import { Route as AppProfileProfileIdRouteImport } from './routes/_app/profile/$profileId'
 import { Route as AppMyQuizzesQuizIdRouteImport } from './routes/_app/my-quizzes/$quizId'
@@ -66,6 +67,11 @@ const AppMyQuizzesIndexRoute = AppMyQuizzesIndexRouteImport.update({
   path: '/my-quizzes/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppQuizesQuizIdRoute = AppQuizesQuizIdRouteImport.update({
   id: '/quizes/$quizId',
   path: '/quizes/$quizId',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/my-quizzes/$quizId': typeof AppMyQuizzesQuizIdRoute
   '/profile/$profileId': typeof AppProfileProfileIdRoute
   '/quizes/$quizId': typeof AppQuizesQuizIdRoute
+  '/admin/': typeof AppAdminIndexRoute
   '/my-quizzes/': typeof AppMyQuizzesIndexRoute
   '/profile/': typeof AppProfileIndexRoute
 }
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/my-quizzes/$quizId': typeof AppMyQuizzesQuizIdRoute
   '/profile/$profileId': typeof AppProfileProfileIdRoute
   '/quizes/$quizId': typeof AppQuizesQuizIdRoute
+  '/admin': typeof AppAdminIndexRoute
   '/my-quizzes': typeof AppMyQuizzesIndexRoute
   '/profile': typeof AppProfileIndexRoute
 }
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/_app/my-quizzes/$quizId': typeof AppMyQuizzesQuizIdRoute
   '/_app/profile/$profileId': typeof AppProfileProfileIdRoute
   '/_app/quizes/$quizId': typeof AppQuizesQuizIdRoute
+  '/_app/admin/': typeof AppAdminIndexRoute
   '/_app/my-quizzes/': typeof AppMyQuizzesIndexRoute
   '/_app/profile/': typeof AppProfileIndexRoute
 }
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/my-quizzes/$quizId'
     | '/profile/$profileId'
     | '/quizes/$quizId'
+    | '/admin/'
     | '/my-quizzes/'
     | '/profile/'
   fileRoutesByTo: FileRoutesByTo
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/my-quizzes/$quizId'
     | '/profile/$profileId'
     | '/quizes/$quizId'
+    | '/admin'
     | '/my-quizzes'
     | '/profile'
   id:
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/_app/my-quizzes/$quizId'
     | '/_app/profile/$profileId'
     | '/_app/quizes/$quizId'
+    | '/_app/admin/'
     | '/_app/my-quizzes/'
     | '/_app/profile/'
   fileRoutesById: FileRoutesById
@@ -240,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMyQuizzesIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/admin/': {
+      id: '/_app/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/quizes/$quizId': {
       id: '/_app/quizes/$quizId'
       path: '/quizes/$quizId'
@@ -269,6 +288,7 @@ interface AppRouteRouteChildren {
   AppMyQuizzesQuizIdRoute: typeof AppMyQuizzesQuizIdRoute
   AppProfileProfileIdRoute: typeof AppProfileProfileIdRoute
   AppQuizesQuizIdRoute: typeof AppQuizesQuizIdRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
   AppMyQuizzesIndexRoute: typeof AppMyQuizzesIndexRoute
   AppProfileIndexRoute: typeof AppProfileIndexRoute
 }
@@ -278,6 +298,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppMyQuizzesQuizIdRoute: AppMyQuizzesQuizIdRoute,
   AppProfileProfileIdRoute: AppProfileProfileIdRoute,
   AppQuizesQuizIdRoute: AppQuizesQuizIdRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
   AppMyQuizzesIndexRoute: AppMyQuizzesIndexRoute,
   AppProfileIndexRoute: AppProfileIndexRoute,
 }
