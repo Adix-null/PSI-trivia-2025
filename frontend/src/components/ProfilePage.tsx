@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Edit, Loader2, PlayCircle, Star, Trophy, BarChart3 } from "lucide-react";
 import { fetchOwnProfile, fetchProfileById, type UserProfile } from "@/lib/profile";
 import { getCreatorBadge, getQuizzerBadge } from "@/lib/badges";
+import { PrivacyDataCard } from "@/components/PrivacyDataCard";
 
 type ProfilePageProps = {
   profileId?: number;
@@ -138,6 +139,7 @@ export function ProfilePage(props: ProfilePageProps = {}) {
               subLabel={avgPlaysPerQuiz}
             />
           </div>
+          {isOwnProfile && <PrivacyDataCard />}
         </div>
       </div>
 
