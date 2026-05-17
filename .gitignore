@@ -17,4 +17,3 @@ backend/appsettings.json
 **/bin/
 TestResults/
 .idea/
-/frontend/src/routeTree.gen.ts
