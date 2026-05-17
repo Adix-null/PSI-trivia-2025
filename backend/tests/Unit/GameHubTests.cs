@@ -77,7 +77,8 @@ public class GameHubTests
             gameService ?? CreateGameService(),
             quizService ?? CreateQuizService(),
             hubContext?.Object ?? CreateMockHubContext().Object,
-            userStatsService ?? CreateUserStatsService()
+            userStatsService ?? CreateUserStatsService(),
+            null!
         );
 
         // Mock the Hub Context
