@@ -2,13 +2,14 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EditProfileDialog } from "@/components/EditProfileDialog";
+import { PrivacyDataCard } from "@/components/PrivacyDataCard";
 import { useQuery } from "@tanstack/react-query";
-import { Edit, Loader2, PlayCircle, Star, Trophy, BarChart3 } from "lucide-react";
-import { fetchOwnProfile, fetchProfileById, type UserProfile } from "@/lib/profile";
+import { Edit, Loader2, PlayCircle, Star, Trophy, BarChart3, Bell } from "lucide-react";
+import { fetchOwnProfile, fetchProfileById, type UserProfile, type Warning } from "@/lib/profile";
 import { getCreatorBadge, getQuizzerBadge } from "@/lib/badges";
 
 type ProfilePageProps = {
@@ -59,6 +60,7 @@ export function ProfilePage(props: ProfilePageProps = {}) {
     : undefined;
   const quizzerBadge = getQuizzerBadge(stats.gamesPlayed);
   const creatorBadge = getCreatorBadge(stats.quizPlays);
+  const warnings = profile.warnings ?? [];
 
   return (
     <>
@@ -138,6 +140,12 @@ export function ProfilePage(props: ProfilePageProps = {}) {
               subLabel={avgPlaysPerQuiz}
             />
           </div>
+
+          {isOwnProfile && warnings.length > 0 && (
+            <WarningsCard warnings={warnings} />
+          )}
+
+          {isOwnProfile && <PrivacyDataCard />}
         </div>
       </div>
 
@@ -145,6 +153,32 @@ export function ProfilePage(props: ProfilePageProps = {}) {
         <EditProfileDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
       )}
     </>
+  );
+}
+
+function WarningsCard({ warnings }: { warnings: Warning[] }) {
+  return (
+    <Card className="border-orange-200 bg-orange-50">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-orange-800 text-base">
+          <Bell className="size-4" />
+          Warnings
+          <Badge variant="secondary" className="ml-auto bg-orange-200 text-orange-800">
+            {warnings.length}
+          </Badge>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {warnings.map((w) => (
+          <div key={w.id} className="rounded-md border border-orange-200 bg-white p-3 text-sm">
+            <p className="text-foreground">{w.message}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              From {w.adminUsername} · {new Date(w.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
   );
 }
 
