@@ -3,6 +3,8 @@ using backend.Services;
 using backend.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 
 namespace backend.Controllers;
 
@@ -32,12 +34,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _userService.GetUserByIdAsync(id);
-        
+
         if (user == null)
         {
             return NotFound(new { message = "User not found" });
         }
-        
+
         return Ok(user);
     }
 
@@ -96,12 +98,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _userService.DeleteUserAsync(id);
-        
+
         if (!deleted)
         {
             return NotFound(new { message = "User not found" });
         }
-        
+
         return Ok(new { message = "User deleted successfully" });
     }
 
@@ -134,10 +136,10 @@ public class UsersController : ControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Ok(new 
-        { 
+        return Ok(new
+        {
             message = "Username updated successfully",
-            user = new 
+            user = new
             {
                 id = updatedUser!.Id,
                 username = updatedUser.Username,
@@ -176,10 +178,10 @@ public class UsersController : ControllerBase
             Expires = DateTimeOffset.UtcNow.AddHours(1)
         });
 
-        return Ok(new 
-        { 
+        return Ok(new
+        {
             message = "Email updated successfully",
-            user = new 
+            user = new
             {
                 id = updatedUser!.Id,
                 username = updatedUser.Username,
@@ -202,8 +204,8 @@ public class UsersController : ControllerBase
         }
 
         var (success, error) = await _userService.UpdatePasswordAsync(
-            int.Parse(userId), 
-            request.CurrentPassword, 
+            int.Parse(userId),
+            request.CurrentPassword,
             request.NewPassword
         );
 
@@ -213,5 +215,52 @@ public class UsersController : ControllerBase
         }
 
         return Ok(new { message = "Password updated successfully" });
+    }
+    
+    // Export the current user's personal data
+    [Authorize]
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportMyData()
+    {
+        var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdValue) || !int.TryParse(userIdValue, out var userId))
+        {
+            return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        var data = await _userService.ExportUserDataAsync(userId);
+        if (data == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+        var bytes = Encoding.UTF8.GetBytes(json);
+        var fileName = $"trivia-data-export-{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.json";
+        return File(bytes, "application/json", fileName);
+    }
+
+    // Delete the current user's account
+    [Authorize]
+    [HttpDelete("me")]
+    public async Task<IActionResult> DeleteMyAccount()
+    {
+        var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdValue) || !int.TryParse(userIdValue, out var userId))
+        {
+            return Unauthorized(new { message = "Unauthorized" });
+        }
+
+        var deleted = await _userService.DeleteUserAsync(userId);
+        if (!deleted)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        Response.Cookies.Delete("authToken");
+        return Ok(new { message = "Account deleted successfully" });
     }
 }
