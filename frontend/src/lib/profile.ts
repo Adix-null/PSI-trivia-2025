@@ -1,4 +1,3 @@
-
 export interface UserStats {
   userId: number;
   gamesPlayed: number;
@@ -7,10 +6,21 @@ export interface UserStats {
   quizPlays: number;
 }
 
+export interface Warning {
+  id: number;
+  message: string;
+  adminUsername: string;
+  createdAt: string;
+}
+
 export interface UserProfile {
   userId: number;
   username: string;
   email?: string | null;
+  isBanned?: boolean;
+  banReason?: string | null;
+  bannedAt?: string | null;
+  warnings?: Warning[];
   stats: UserStats;
 }
 
