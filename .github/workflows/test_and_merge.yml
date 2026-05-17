@@ -28,7 +28,7 @@ jobs:
         run: dotnet restore backend
 
       - name: Run tests
-        run: dotnet test backend/tests
+        run: dotnet test backend/tests --no-restore --configuration Release
 
       - name: Merge dev into main
         run: |
