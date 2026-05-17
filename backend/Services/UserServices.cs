@@ -203,11 +203,10 @@ public class UserService
         var stats = await _userStatsService.GetUserStatsAsync(userId)
             ?? await _userStatsService.AddUserStatsAsync(userId);
 
-        var warnings = await _db.Warnings
+        var warningsQuery = await _db.Warnings
             .AsNoTracking()
             .Include(w => w.Admin)
             .Where(w => w.UserId == userId)
-            .OrderByDescending(w => w.CreatedAt)
             .Select(w => new WarningDto
             {
                 Id = w.Id,
@@ -216,6 +215,8 @@ public class UserService
                 CreatedAt = w.CreatedAt
             })
             .ToListAsync();
+
+        var warnings = warningsQuery.OrderByDescending(w => w.CreatedAt).ToList();
 
         return new UserProfileDto
         {
