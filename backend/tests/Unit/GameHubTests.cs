@@ -51,6 +51,20 @@ public class GameHubTests
         return new UserStatsService(context);
     }
 
+    private UserService CreateUserService()
+    {
+        var connection = new SqliteConnection("DataSource=:memory:");
+        connection.Open();
+        
+        var options = new DbContextOptionsBuilder<backend.Data.AppDbContext>()
+            .UseSqlite(connection)
+            .Options;
+        
+        var context = new backend.Data.AppDbContext(options);
+        context.Database.EnsureCreated();
+        return new UserService(context, new PasswordService(), new UserStatsService(context));
+    }
+
     private Mock<IHubContext<GameHub>> CreateMockHubContext()
     {
         var mockHubContext = new Mock<IHubContext<GameHub>>();
@@ -70,6 +84,7 @@ public class GameHubTests
         QuizService? quizService = null,
         Mock<IHubContext<GameHub>>? hubContext = null,
         UserStatsService? userStatsService = null,
+        UserService? userService = null,
         ClaimsPrincipal? user = null,
         string? connectionId = null)
     {
@@ -77,7 +92,8 @@ public class GameHubTests
             gameService ?? CreateGameService(),
             quizService ?? CreateQuizService(),
             hubContext?.Object ?? CreateMockHubContext().Object,
-            userStatsService ?? CreateUserStatsService()
+            userStatsService ?? CreateUserStatsService(),
+            userService ?? CreateUserService()
         );
 
         // Mock the Hub Context

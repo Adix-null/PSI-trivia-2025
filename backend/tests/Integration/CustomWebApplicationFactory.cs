@@ -28,7 +28,7 @@ namespace tests.Integration
             builder.UseEnvironment("Test");
             builder.ConfigureAppConfiguration((context, config) =>
             {
-                var testSettings = new Dictionary<string, string>
+                var testSettings = new Dictionary<string, string?>
                 {
                     ["Jwt:Key"] = "0123456789ABCDEFGHIJKLMNOPQRSTUV",
                     ["Jwt:Issuer"] = "TestIssuer",
